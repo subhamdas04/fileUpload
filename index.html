@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <style type="text/css">
+        .main{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 300px;
+            height: 350px;
+            border-radius: 10px;
+            border: 1px solid black;
+        }
+        .btn{
+            width: auto;
+            height: auto;
+            color: white;
+            border-radius: 10px;
+            margin-top: 20px;
+            background: green;
+            padding: 5px 20px 5px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <center>
+        <div class="main"></div>
+        <form method="POST">
+            <input type="file" name="file" id="file" accept="image/*" style="display: none;"><br>
+            <label for="file" class="btn">Upload File</label>
+        </form>
+    </center>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#file').change(function(){
+                var form_data = new FormData();
+                form_data.append("file", document.getElementById("file").files[0]);
+                $.ajax({
+                    type: "POST",
+                    url: "upload.php",
+                    data: form_data,
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    beforeSend: function(){
+                        document.getElementsByClassName("main")[0].innerHTML = "Please Wait...";
+                    },
+                    success: function(data){
+                        document.getElementsByClassName("main")[0].style.backgroundImage = "url(" + data + ")";
+                        document.getElementsByClassName("main")[0].style.backgroundSize = "100% 100%";
+                        document.getElementsByClassName("main")[0].innerHTML = "";
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
